@@ -518,6 +518,12 @@
           </div>
         </div>
         <div class="field">
+          <label for="sub-rideshare">Monthly rideshare / Uber budget</label>
+          <div class="input-prefix">
+            <input type="number" id="sub-rideshare" value="30" min="0" max="1000" step="10">
+          </div>
+        </div>
+        <div class="field">
           <label for="sub-rent">Monthly rent / mortgage</label>
           <div class="input-prefix">
             <input type="number" id="sub-rent" value="1800" min="0" max="10000" step="50">
@@ -1089,7 +1095,7 @@
       q('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-
+  document.addEventListener('DOMContentLoaded', () => {
   // ── Slider helpers ──
   function syncSlider(input, valEl, fmt) {
     const v = input.value;
@@ -1231,7 +1237,8 @@
     syncSlider(uTripsEl, vUTrips);
     updateGasBadge();
     calculate(false);
-  });
+  }); // inner DOMContentLoaded (init)
+  }); // outer DOMContentLoaded (wiring)
 </script>
 
 </body>
