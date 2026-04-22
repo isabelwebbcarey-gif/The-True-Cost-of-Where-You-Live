@@ -637,6 +637,14 @@
           </div>
         </div>
 
+        <div class="field" id="congestion-field" style="display:none">
+          <label for="congestion">Daily congestion charge</label>
+          <div class="input-prefix">
+            <input type="number" id="congestion" value="9" min="0" max="30" step="1">
+          </div>
+          <div style="font-size:.73rem;color:var(--subtle)">Days/year auto-calculated from your trip frequency</div>
+        </div>
+        
         <label class="toggle-row" for="urban-car-toggle">
           <span>I'd still own a car in the city</span>
           <span class="toggle-switch">
@@ -883,7 +891,7 @@
   miami:        { transit:112, rent:1800 },
   minneapolis:  { transit:98,  rent:1300 },
   nashville:    { transit:65,  rent:1550 },
-  nyc:          { transit:132, rent:3500 },
+  nyc:          { transit:132, rent:3500, congestion: 9 },
   philadelphia: { transit:96,  rent:1700 },
   phoenix:      { transit:64,  rent:1200 },
   portland:     { transit:100, rent:1600 },
@@ -954,7 +962,9 @@
       cpay     = i.urbanCarPay * 12;
       parking  = i.urbanParking * 12;
     }
-    const transport = transit + rideshare + commute + ins + mnt + cpay + parking;
+    const congestionDays = i.tripsWeek * 52;
+    const congestionCost = (CITY[i.city]?.congestion || 0) > 0 ? +q('congestion').value * congestionDays : 0;
+    const transport = transit + rideshare + commute + ins + mnt + cpay + parking + congestionCost;
     return { transit, rideshare, commute, ins, mnt, cpay, parking, transport, housing, total: transport + housing };
   }
 
@@ -1192,7 +1202,10 @@
   q('city').addEventListener('change', function () {
     const c = CITY[this.value];
     q('transit-pass').value = c.transit;
-    q('urban-rent').value   = c.rent;
+    q('urban-rent').value = c.rent;
+    const hasCongestion = c.congestion > 0;
+    q('congestion-field').style.display = hasCongestion ? '' : 'none';
+    if (hasCongestion) q('congestion').value = c.congestion;
     calculate(false);
   });
 
