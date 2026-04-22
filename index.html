@@ -457,7 +457,7 @@
   <p class="tagline">Living farther out can cost more than you think; the suburbs aren’t always the cheaper option.</p>
   <div class="data-note">
     <i class="fa-solid fa-circle-info"></i>
-    AAA 2024 · Zillow 2024 · Transit schedules
+    AAA 2024 · Zumper/Zillow 2025 · Transit schedules
   </div>
 </header>
 
@@ -606,6 +606,17 @@
         </div>
 
         <div class="field">
+          <label for="transport-mode">Primary transport mode</label>
+          <div class="select-wrap">
+            <select id="transport-mode">
+              <option value="transit">Transit / Subway</option>
+              <option value="bike">Bike</option>
+              <option value="walk">Walk</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="field">
           <label for="transit-pass">Monthly transit pass <span style="font-weight:400;text-transform:none;letter-spacing:0">(auto-filled)</span></label>
           <div class="input-prefix">
             <input type="number" id="transit-pass" value="105" min="0" max="300" step="5">
@@ -620,7 +631,7 @@
         </div>
 
         <div class="field">
-          <label for="urban-rent">Median 1BR rent <span style="font-weight:400;text-transform:none;letter-spacing:0">(auto-filled · Zillow 2024)</span></label>
+          <label for="urban-rent">Median 1BR rent <span style="font-weight:400;text-transform:none;letter-spacing:0">(auto-filled · Zillow 2025)</span></label>
           <div class="input-prefix">
             <input type="number" id="urban-rent" value="1800" min="0" max="10000" step="50">
           </div>
@@ -860,27 +871,28 @@
   };
 
   const CITY = {
-    atlanta:      { transit:95,  rent:1700 },
-    austin:       { transit:41,  rent:1800 },
-    boston:       { transit:90,  rent:2700 },
-    charlotte:    { transit:88,  rent:1500 },
-    chicago:      { transit:105, rent:1800 },
-    dallas:       { transit:40,  rent:1500 },
-    denver:       { transit:114, rent:1800 },
-    houston:      { transit:40,  rent:1400 },
-    la:           { transit:100, rent:2200 },
-    miami:        { transit:112, rent:2300 },
-    minneapolis:  { transit:98,  rent:1400 },
-    nashville:    { transit:65,  rent:1600 },
-    nyc:          { transit:132, rent:3200 },
-    philadelphia: { transit:96,  rent:1700 },
-    phoenix:      { transit:64,  rent:1500 },
-    portland:     { transit:100, rent:1700 },
-    sf:           { transit:85,  rent:3100 },
-    sandiego:     { transit:72,  rent:2400 },
-    seattle:      { transit:99,  rent:2200 },
-    dc:           { transit:100, rent:2400 },
-  };
+  atlanta:      { transit:95,  rent:1400 },
+  austin:       { transit:41,  rent:1550 },
+  boston:       { transit:90,  rent:2600 },
+  charlotte:    { transit:88,  rent:1400 },
+  chicago:      { transit:105, rent:1600 },
+  dallas:       { transit:40,  rent:1300 },
+  denver:       { transit:114, rent:1700 },
+  houston:      { transit:40,  rent:1100 },
+  la:           { transit:100, rent:2200 },
+  miami:        { transit:112, rent:1800 },
+  minneapolis:  { transit:98,  rent:1300 },
+  nashville:    { transit:65,  rent:1550 },
+  nyc:          { transit:132, rent:3500 },
+  philadelphia: { transit:96,  rent:1700 },
+  phoenix:      { transit:64,  rent:1200 },
+  portland:     { transit:100, rent:1600 },
+  sf:           { transit:85,  rent:3800 },
+  sandiego:     { transit:72,  rent:2300 },
+  seattle:      { transit:99,  rent:2100 },
+  dc:           { transit:100, rent:2000 },
+};
+
 
   function getInputs() {
     return {
@@ -924,7 +936,10 @@
   }
 
   function calcUrban(i) {
-    const transit   = i.transitPass * 12;
+    const mode = q('transport-mode').value;
+    const transit = mode === 'transit' ? i.transitPass * 12
+                  : mode === 'bike'    ? 240
+                  : 0;
     const rideshare = i.rideshare * 12;
     const housing   = i.urbanRent * 12;
     let commute = 0, ins = 0, mnt = 0, cpay = 0, parking = 0;
@@ -1162,6 +1177,9 @@
     q(id).addEventListener('input', () => calculate(false));
   });
 
+  // Transport mode toggle
+  q('transport-mode').addEventListener('change', () => calculate(false));
+    
   // City → update transit + rent
   q('city').addEventListener('change', function () {
     const c = CITY[this.value];
