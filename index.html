@@ -945,7 +945,7 @@
 
   function calcUrban(i) {
     const mode = q('transport-mode').value;
-    const transit = i.transitPass * 12;
+    const transit = q('transport-mode').value === 'transit' ? i.transitPass * 12 : 0;
    
     const rideshare = i.rideshare * 12;
     const housing   = i.urbanRent * 12;
