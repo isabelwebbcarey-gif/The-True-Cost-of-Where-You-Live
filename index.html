@@ -609,7 +609,7 @@
           <label for="transport-mode">Primary transport mode</label>
           <div class="select-wrap">
             <select id="transport-mode">
-              <option value="transit">Transit / Subway</option>
+              <option value="transit">Transit</option>
               <option value="bike">Bike</option>
               <option value="walk">Walk</option>
             </select>
@@ -1178,7 +1178,15 @@
   });
 
   // Transport mode toggle
-  q('transport-mode').addEventListener('change', () => calculate(false));
+  q('transport-mode').addEventListener('change', function() {
+    if (this.value === 'bike' || this.value === 'walk') {
+      q('transit-pass').value = 0;
+    } else {
+      const c = CITY[q('city').value];
+      q('transit-pass').value = c.transit;
+    }
+    calculate(false);
+  });
     
   // City → update transit + rent
   q('city').addEventListener('change', function () {
