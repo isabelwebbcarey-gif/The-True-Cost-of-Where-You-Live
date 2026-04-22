@@ -1242,22 +1242,20 @@
   }
 
   // Init
-  document.addEventListener('DOMContentLoaded', () => {
-    const fromUrl = loadParams();
-    if (!fromUrl) {
-      const car = CAR[q('car-type').value];
-      q('insurance').value  = car.ins;
-      q('maintenance').value = car.mnt;
-    }
-    syncSlider(driveEl, vDrive);
-    syncSlider(tripsEl, vTrips);
-    syncSlider(gasEl, vGas, v => parseFloat(v).toFixed(2));
-    syncSlider(uDriveEl, vUDrive);
-    syncSlider(uTripsEl, vUTrips);
-    updateGasBadge();
-    calculate(false);
-  }); // inner DOMContentLoaded (init)
-  }); // outer DOMContentLoaded (wiring)
+  const fromUrl = loadParams();
+  if (!fromUrl) {
+    const car = CAR[q('car-type').value];
+    q('insurance').value  = car.ins;
+    q('maintenance').value = car.mnt;
+  }
+  syncSlider(driveEl, vDrive);
+  syncSlider(tripsEl, vTrips);
+  syncSlider(gasEl, vGas, v => parseFloat(v).toFixed(2));
+  syncSlider(uDriveEl, vUDrive);
+  syncSlider(uTripsEl, vUTrips);
+  updateGasBadge();
+  calculate(false);
+  }); // DOMContentLoaded
 </script>
 
 </body>
