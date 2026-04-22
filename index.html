@@ -453,8 +453,8 @@
 <body>
 
 <header class="site-header">
-  <h1>The <span>True Cost</span> of Where You Live</h1>
-  <p class="tagline">Rent is just the start. Add your car and commute.</p>
+  <h1>The <span>Hidden Cost</span> of Living Far Away aka the Suburb Tax</h1>
+  <p class="tagline">See what your zip code is actually costing you.</p>
   <div class="data-note">
     <i class="fa-solid fa-circle-info"></i>
     AAA 2024 · Zillow 2024 · Transit schedules
@@ -510,6 +510,13 @@
           </div>
         </div>
 
+
+        <div class="field">
+          <label for="sub-rideshare">Monthly rideshare / Uber budget</label>
+          <div class="input-prefix">
+            <input type="number" id="sub-rideshare" value="30" min="0" max="1000" step="10">
+          </div>
+        </div>
         <div class="field">
           <label for="sub-rent">Monthly rent / mortgage</label>
           <div class="input-prefix">
@@ -566,7 +573,7 @@
         <div class="panel-icon"><i class="fa-solid fa-train-subway"></i></div>
         <div>
           <div class="panel-title">City Life</div>
-          <div class="panel-subtitle">Transit, walkability — no car required</div>
+          <div class="panel-subtitle">Transit, walkability, density</div>
         </div>
       </div>
       <div class="panel-body">
@@ -759,8 +766,8 @@
           </tr>
           <tr>
             <td class="bk-label">Rideshare / Uber</td>
-            <td class="bk-s" style="color:var(--subtle)">—</td>
-            <td class="bk-u" id="t-u-rideshare">—</td>
+            <td class="bk-s" id="t-s-rideshare">—</td>
+            <td class="bk-u" style="color:var(--subtle)">—</td> 
           </tr>
           <tr>
             <td class="bk-label">Car insurance</td>
@@ -912,8 +919,9 @@
     const parking = i.parking * 12;
     const cpay    = i.carPayment * 12;
     const housing = i.subRent * 12;
-    const transport = commute + parking + cpay + i.insurance + i.maintenance;
-    return { commute, parking, cpay, ins: i.insurance, mnt: i.maintenance, transport, housing, total: transport + housing, milesYr };
+    const subRideshare = +q('sub-rideshare').value * 12;
+    const transport = commute + parking + cpay + i.insurance + i.maintenance + subRideshare;
+    return { commute, parking, cpay, ins: i.insurance, mnt: i.maintenance, subRideshare, transport, housing, total: transport + housing, milesYr };
   }
 
   function calcUrban(i) {
@@ -993,6 +1001,7 @@
     t('t-u-transit', u.transit);  t('t-u-rideshare', u.rideshare);
     t('t-s-ins', s.ins);          t('t-s-mnt', s.mnt);
     t('t-s-cpay', s.cpay);        t('t-s-park', s.parking);
+    t('t-s-rideshare', s.subRideshare);
     t('t-s-total', s.total);      t('t-u-total', u.total);
 
     // Urban car cells — toggle zero-cell class and values
