@@ -1073,7 +1073,7 @@
     }
 
     // Commute time
-    const hrs = Math.round((i.driveMin / 60) * 2 * i.tripsWeek * 52);
+    const hrs = Math.round((i.driveMin / 60) * i.tripsWeek * 52);
     const wks = (hrs / 40).toFixed(1);
     q('ins-time').textContent = `${hrs.toLocaleString()} hours/year behind the wheel — equivalent to ${wks} full 40-hour work weeks.`;
 
