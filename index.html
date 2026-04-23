@@ -939,7 +939,9 @@
     const cpay    = i.carPayment * 12;
     const housing = i.subRent * 12;
     const subRideshare = +q('sub-rideshare').value * 12;
-    const transport = commute + parking + cpay + i.insurance + i.maintenance + subRideshare;
+    const congestionDays = i.tripsWeek * 52;
+    const congestionCost = (CITY[i.city]?.congestion || 0) > 0 ? +q('congestion').value * congestionDays : 0;
+    const transport = commute + parking + cpay + i.insurance + i.maintenance + subRideshare + congestionCost;
     return { commute, parking, cpay, ins: i.insurance, mnt: i.maintenance, subRideshare, transport, housing, total: transport + housing, milesYr };
   }
 
@@ -961,9 +963,7 @@
       cpay     = i.urbanCarPay * 12;
       parking  = i.urbanParking * 12;
     }
-    const congestionDays = i.tripsWeek * 52;
-    const congestionCost = (CITY[i.city]?.congestion || 0) > 0 ? +q('congestion').value * congestionDays : 0;
-    const transport = transit + rideshare + commute + ins + mnt + cpay + parking + congestionCost;
+    const transport = transit + rideshare + commute + ins + mnt + cpay + parking;
     return { transit, rideshare, commute, ins, mnt, cpay, parking, transport, housing, total: transport + housing };
   }
 
